@@ -9,10 +9,14 @@ import SwiftUI
 import MapKit
 
 struct HomeView: View {
-    //Properties && States
+    //Properties & States
     @State private var selectedButton: Int = 0 // 0 = Offered , 1 = Accepted
     @State private var presentSideMenu: Bool = false
     @State var selectedSideMenuTab = 0 // 0 = Home, 1 = Open orders and so on.....
+    @State private var sheetHeight: CGFloat = 300 // Default sheet height
+    @State private var maxSheetHeight: CGFloat = 700 // Fully expanded
+    @State private var minSheetHeight: CGFloat = 300 // Collapsed height
+    @State private var sheetOffset: CGFloat = 0 // Tracks dragging
     
     @State var region = MKCoordinateRegion(
         center:  CLLocationCoordinate2D(
@@ -24,20 +28,16 @@ struct HomeView: View {
             longitudeDelta: 0.5
         )
     )
-    @State private var sheetHeight: CGFloat = 300 // Default sheet height
-    @State private var maxSheetHeight: CGFloat = 700 // Fully expanded
-    @State private var minSheetHeight: CGFloat = 300 // Collapsed height
-    @State private var sheetOffset: CGFloat = 0 // Tracks dragging
     
     var body: some View {
         ZStack {
-            // 🗺️ Main Content (Map)
+            // Main Content (Map)
             TabView(selection: $selectedSideMenuTab) {
                 Map(coordinateRegion: $region)
                     .tag(0)
             }
 
-            // 📌 Bottom Sheet
+            // Bottom Sheet
             VStack {
                 Spacer()
                 BottomSheet
@@ -64,8 +64,7 @@ struct HomeView: View {
                     )
             }
             .ignoresSafeArea()
-            
-            // 🚀 Side Menu (Appears Over Everything)
+            // Side Menu (Appears Over Everything)
             if presentSideMenu {
                 SideMenuContentView(
                     isShowing: $presentSideMenu,
@@ -75,58 +74,63 @@ struct HomeView: View {
                     ))
                 )
                 .transition(.move(edge: .leading))
-                .zIndex(2) // Keep it above the sheet
             }
         }
         .toolbar {
             //MARK: Used toolbar instead of using VStack
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    withAnimation {
-                        presentSideMenu.toggle()
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        withAnimation {
+                            presentSideMenu.toggle()
+                        }
+                        print("SideMenu button tapped")
+                    }) {
+                        Image("sideMenu")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 24)
                     }
-                    print("SideMenu button tapped")
-                }) {
-                    Image("sideMenu")
+                    .opacity(presentSideMenu ? 0: 1)
+                }
+                
+                ToolbarItem(placement: .principal) {
+                    Image("dilvrd")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 24)
+                        .frame(height: 30)
+                        .opacity(presentSideMenu ? 0: 1)
+
                 }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Image("dilvrd")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 30)
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    Button(action: {
-                        print("Search tapped")
-                    }) {
-                        Image("Magnifer")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 21.5)
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack {
+                        Button(action: {
+                            print("Search tapped")
+                        }) {
+                            Image("Magnifer")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 21.5)
+                        }
+                        Button(action: {
+                            print("Notification tapped")
+                        }) {
+                            Image("Bell")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 21.5)
+                        }
+                        
                     }
-                    Button(action: {
-                        print("Notification tapped")
-                    }) {
-                        Image("Bell")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 21.5)
-                    }
-                    
+                    .opacity(presentSideMenu ? 0: 1)
+
                 }
-            }
         }
         .toolbarVisibility(.automatic, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
     }
+    
     @ViewBuilder var BottomSheet: some View {
         VStack(spacing: 5) {
             Spacer(minLength: 5)
@@ -139,4 +143,5 @@ struct HomeView: View {
         .background(.white)
         .cornerRadius(20, corners: [.topLeft, .topRight])
     }
+    
 }

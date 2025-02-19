@@ -15,10 +15,12 @@ struct SideMenuContentView: View {
                 ZStack(alignment: .bottom) {
                     if (isShowing) {
                         Color.black
-                            .opacity(0.3)
+                            .opacity(0.01)
                             .ignoresSafeArea()
                             .onTapGesture {
-                                isShowing.toggle()
+                                withAnimation {
+                                    isShowing.toggle()
+                                }
                             }
                         content
                             .transition(edgeTransition)
