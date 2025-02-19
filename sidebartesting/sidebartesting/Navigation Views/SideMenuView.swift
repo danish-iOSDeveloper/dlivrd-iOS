@@ -18,9 +18,7 @@ struct SideMenuView: View {
             ZStack{
                 Rectangle()
                     .fill(.white)
-                    .frame(width: 270)
-                    .shadow(color: .purple.opacity(0.1), radius: 5, x: 0, y: 3)
-                
+                    .frame(width: 370)
                 VStack(alignment: .leading, spacing: 0) {
 //                    ProfileImageView()
 //                        .frame(height: 140)
@@ -36,7 +34,7 @@ struct SideMenuView: View {
                     Spacer()
                 }
                 .padding(.top, 100)
-                .frame(width: 270)
+                .frame(width: 370)
                 .background(
                     Color.white
                 )
@@ -79,29 +77,25 @@ struct SideMenuView: View {
             action()
         } label: {
             VStack(alignment: .leading){
-                HStack(spacing: 20){
-                    Rectangle()
-                        .fill(isSelected ? .purple : .white)
-                        .frame(width: 5)
-                    
-                    ZStack{
-                        Image(imageName)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(isSelected ? loginButtonBgColor : .white)
+                    HStack {
+                        Text(title)
+                            .textDecoration(size: 14, fontWeight: .regular, color: .black)
+                        Spacer()
+                        Image(systemName: "chevron.forward")
                             .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(isSelected ? .black : .gray)
-                            .frame(width: 26, height: 26)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 15)
+                            .foregroundStyle(.black)
                     }
-                    .frame(width: 30, height: 30)
-                    Text(title)
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(isSelected ? .black : .gray)
-                    Spacer()
+                    .padding(10)
                 }
             }
+            .padding(.vertical, 20)
+            .padding(.horizontal, 10)
         }
-        .frame(height: 50)
-        .background(
-            LinearGradient(colors: [isSelected ? .purple.opacity(0.5) : .white, .white], startPoint: .leading, endPoint: .trailing)
-        )
+        .frame(height: 44)
     }
 }
