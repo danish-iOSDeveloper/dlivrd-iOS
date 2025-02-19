@@ -57,14 +57,14 @@ struct OrderCardView: View {
                                 .font(.custom("Poppins", size: 12))
                         }
                         Divider()
-                    }
-                    VStack(alignment: .leading, spacing: 20) {
-                        
-                        locationView(location: order.orderPickupLocation, isPickup: true)
-                        // Foreach to view multiple dropOFF locations if needed
-                        ForEach(order.orderDropOffLocations) { location in
-                            if location.id == order.orderDropOffLocations.first?.id {
-                                locationView(location: location, isPickup: false, remainingLocations: order.orderDropOffLocations.count - 1)
+                        VStack(alignment: .leading, spacing: 20) {
+                            
+                            locationView(location: order.orderPickupLocation, isPickup: true)
+                            // Foreach to view multiple dropOFF locations if needed
+                            ForEach(order.orderDropOffLocations) { location in
+                                if location.id == order.orderDropOffLocations.first?.id {
+                                    locationView(location: location, isPickup: false, remainingLocations: order.orderDropOffLocations.count - 1)
+                                }
                             }
                         }
                     }

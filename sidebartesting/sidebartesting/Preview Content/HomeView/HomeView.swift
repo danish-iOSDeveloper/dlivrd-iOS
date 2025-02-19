@@ -10,7 +10,10 @@ import MapKit
 
 struct HomeView: View {
     //Properties && States
-    @State private var selectedButton = 0 // 0 = Offered , 1 = Accepted
+    @State private var selectedButton: Int = 0 // 0 = Offered , 1 = Accepted
+    @State private var presentSideMenu: Bool = false
+    @State var selectedSideMenuTab = 0 // 0 = Home, 1 = Open orders and so on.....
+    
     @State var region = MKCoordinateRegion(
         center:  CLLocationCoordinate2D(
             latitude: 37.789467,
@@ -26,7 +29,11 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region)
+            TabView(selection: $selectedSideMenuTab) {
+                Map(coordinateRegion: $region)
+                    .tag(0)
+            }
+//            SideMenuContentView(isShowing: $presentSideMenu, content: AnyView(SideMenuView(selectedSideMenuTab: $selectedSideMenuTab, presentSideMenu: $presentSideMenu)))
         }
         .sheet(isPresented: .constant(true)) {
             VStack {
@@ -54,6 +61,7 @@ struct HomeView: View {
             //MARK: Used toolbar instead of using VStack
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    presentSideMenu = true
                     print("SideMenu button tapped")
                 }) {
                     Image("sideMenu")
