@@ -27,3 +27,10 @@ let dropOffLocations: [DropOffLocation] = [
     DropOffLocation(Name: "Check Ghost Kitchen", address: "Hawthorne Borough School District, Hawthorne, NJ 07506, USA", date: Date().addingTimeInterval(7200)),
     DropOffLocation(Name: "Westfield Garden State Plaza", address: "One Garden State Plaza Pkwy, Paramus, NJ 07652, USA", date: Date().addingTimeInterval(7200))
 ]
+
+let BaseStagingURL = "https://dlivrd-dash-web-staging-100fa95a9d93.herokuapp.com"
+let Apikey = "2e48d06bb4f27f46fb8da4a77940c6be"
+enum Router: String, CaseIterable {
+    case driverLogin = "/driver/login"
+    case driverLogout = "/driver/logout"
+}

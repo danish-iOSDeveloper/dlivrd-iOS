@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    // Properties
-    @State private var username: String = ""
-    @State private var password: String = ""
-    @State private var isLoggedIn: Bool = false  // State to track login status
-    @State private var isShowingPassword: Bool = false // State to show/hide password
-    
+    @ObservedObject var loginVM: LoginViewModel = .init()
+    @StateObject private var locationManager = LocationManager.shared
     // View Body
     var body: some View {
         NavigationStack {
@@ -31,10 +27,10 @@ struct LoginView: View {
                     
                     Spacer(minLength: 30)
                     // Username TextField
-                    CustomTextField(label: "Username", placeholder: "Enter Your Username", text: $username, isPassword: false, isShowingPassword: $isShowingPassword)
+                    CustomTextField(label: "Username", placeholder: "Enter Your Username", text: $loginVM.username, isPassword: false, isShowingPassword: $loginVM.isShowingPassword)
                     
                     // Password TextField
-                    CustomTextField(label: "Password", placeholder: "Enter Your Password", text: $password, isPassword: true, isShowingPassword: $isShowingPassword)
+                    CustomTextField(label: "Password", placeholder: "Enter Your Password", text: $loginVM.password, isPassword: true, isShowingPassword: $loginVM.isShowingPassword)
                     
                     // Forgot Password
                     HStack {
@@ -47,10 +43,9 @@ struct LoginView: View {
                         }
                     }
                     Spacer()
-                    
                     // Log In Button
                     Button {
-                        isLoggedIn = true  // Update state to trigger navigation
+                        loginVM.loginButtonTapped()
                     } label: {
                         Text("Log In")
                             .padding(10)
@@ -59,18 +54,21 @@ struct LoginView: View {
                             .background(loginButtonBgColor)
                             .cornerRadius(10)
                     }
-                    .navigationDestination(isPresented: $isLoggedIn) {
+                    .navigationDestination(isPresented: $loginVM.isLoggedIn) {
                         HomeView() // Navigate to HomeView
                     }
+                    
                 }
                 .padding()
             }
             .ignoresSafeArea(.keyboard)
         }
         .navigationBarBackButtonHidden()
-    }
-}
+        .alert("Authenication Error", isPresented: $loginVM.isShowingAuthError) {
+            //
+        } message: {
+            Text(loginVM.errorMessage)
+        }
 
-#Preview {
-    LoginView()
+    }
 }

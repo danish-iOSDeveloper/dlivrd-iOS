@@ -29,7 +29,20 @@ struct SideMenuView: View {
                     }
                     Spacer()
                     Button(role: .destructive) {
-                        //
+                        Task {
+                            do {
+                                let response = try await NetworkManager.shared.logout(identity: "androidtestdriver")
+                                DispatchQueue.main.async {
+                                    print("User Logged out: \(response.message)")
+                                    print(response.message)
+                                    
+                                }
+                            } catch {
+                                DispatchQueue.main.async {
+                                    print("Error: \(error.localizedDescription)")
+                                }
+                            }
+                        }
                     } label: {
                         HStack {
                             Image("logout")

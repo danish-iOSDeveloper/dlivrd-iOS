@@ -34,6 +34,7 @@ struct CustomTextField: View {
                         }
                     } else {
                         TextField(placeholder, text: $text)
+                            .textInputAutocapitalization(.never)
                     }
                     Spacer()
                     
